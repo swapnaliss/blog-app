@@ -1,42 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MainScreen from "../MainScreen";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
 import Loading from "../../components/Loding";
 import ErrorMessage from "../ErrorMessage";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../actions/userActions";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/blogs");
+    }
+  }, [navigate, userInfo]);
 
   const submit = async (e) => {
     setError(false);
     e.preventDefault();
-
-    try {
-      const config = {
-        header: {
-          "Content-type": "application/json",
-        },
-      };
-      setLoading(true);
-      const { data } = await axios.post("/login", { email, password }, config);
-
-      console.log(data);
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      setError(false);
-      setLoading(false);
-      navigate("/blogs");
-    } catch (error) {
-      setError(error.response.data.message);
-      setLoading(false);
-    }
+    dispatch(login(email, password));
   };
+  
   return (
     <MainScreen title="Login">
       {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
@@ -45,7 +38,7 @@ const LoginScreen = () => {
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
-            type="text"
+            type="email"
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

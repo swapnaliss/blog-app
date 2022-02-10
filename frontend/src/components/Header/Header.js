@@ -1,17 +1,21 @@
 import React from "react";
-import {
-  Navbar,
-  Container,
-  Nav,
-  NavDropdown,
-  Form,
-  FormControl,
-} from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Navbar, Container, Nav, NavDropdown, Form } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../actions/userActions";
 
 const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  // const history = useHistory();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate("/");
+  };
   return (
     <Navbar bg="dark" expand="lg" variant="dark">
       <Container fluid>
@@ -38,10 +42,9 @@ const Header = () => {
               <NavDropdown.Item href="#action4">User Profile</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item
-                onClick={() => {
-                  localStorage.removeItem("userInfo");
-                  navigate("/");
-                }}
+                onClick={
+                  logoutHandler
+                }
               >
                 Logout
               </NavDropdown.Item>

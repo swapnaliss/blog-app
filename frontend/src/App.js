@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Blogs from "./components/screens/MyBlogs/Blogs";
 import LoginScreen from "./components/LoginScreen/LoginScreen";
 import RegisterScreen from "./components/RegisterScreen/RegisterScreen";
+import CreateBlog from "./components/screens/createBlog/Createblog";
 
 const App = () => (
   <BrowserRouter>
@@ -15,6 +16,8 @@ const App = () => (
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
+        <Route path="/blogs/createblog" element={<CreateBlog />} />
+        <Route path="/update" element={<updateBlog />} />
       </Routes>
     </main>
   </BrowserRouter>
