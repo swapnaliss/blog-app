@@ -14,13 +14,13 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const userRegister = useSelector((state) => state.userRegister);
-
+  const {loading, error} = userRegister;
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -41,6 +41,7 @@ const RegisterScreen = () => {
   };
   return (
     <MainScreen title="Register">
+      {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
       {message && <ErrorMessage variant="danger">{message}</ErrorMessage>}
       {loading && <Loading />}
       <Form onSubmit={submit}>

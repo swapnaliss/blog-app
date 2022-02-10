@@ -11,13 +11,13 @@ import { login } from "../../actions/userActions";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  // const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+  const { loading, error, userInfo } = userLogin;
   console.log(userInfo)
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (userInfo) {
@@ -26,7 +26,7 @@ const LoginScreen = () => {
   }, [navigate, userInfo]);
 
   const submit = async (e) => {
-    setError(false);
+    // setError(false);
     e.preventDefault();
     dispatch(login(email, password));
   };
