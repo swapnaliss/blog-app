@@ -108,7 +108,7 @@ export const createBlogAction =
         };
 
         const { data } = await axios.put(
-          `/api/blog/${id}`,
+          `/blog/${id}`,
           { title, content, category },
           config
         );
@@ -147,7 +147,7 @@ export const createBlogAction =
           },
         };
 
-        const { data } = await axios.delete(`/blogs/${id}`, config);
+        const { data } = await axios.delete(`/blog/${id}`, config);
 
         dispatch({
           type: BLOG_DELETE_SUCCESS,

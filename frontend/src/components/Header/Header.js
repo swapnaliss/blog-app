@@ -9,7 +9,6 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
   // const history = useHistory();
 
   const logoutHandler = () => {
@@ -39,7 +38,7 @@ const Header = () => {
             navbarScroll
           >
             <NavDropdown title="User" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action4">User Profile</NavDropdown.Item>
+              {/* <NavDropdown.Item href="#action4">User Profile</NavDropdown.Item> */}
               <NavDropdown.Divider />
               <NavDropdown.Item
                 onClick={

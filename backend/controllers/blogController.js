@@ -15,7 +15,7 @@ const createBlog = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Please Fill all the feilds");
   } else {
-    const note = new Blog({ user: req.user._id, title, content, category });
+    const note = new Blog({title, content, category });
 
     const createdBlog = await note.save();
 
@@ -26,15 +26,13 @@ const createBlog = asyncHandler(async (req, res) => {
 //Creating API for view BY ID
 
 const getBlogById = asyncHandler(async (req, res) => {
-  const Blog = await Blog.findById(req.params.id);
+  const blogById = await Blog.findById(req.params.id);
 
-  if (Blog) {
-    res.json(Blog);
+  if (blogById) {
+    res.json(blogById);
   } else {
     res.status(404).json({ message: "Blog not found" });
   }
-
-  res.json(Blog);
 });
 
 //Creating API for UpdateBlog
@@ -42,19 +40,19 @@ const getBlogById = asyncHandler(async (req, res) => {
 const updateBlog = asyncHandler(async (req, res) => {
   const { title, content, category } = req.body;
 
-  const Blog = await Blog.findById(req.params.id);
+  const blog = await Blog.findById(req.params.id);
 
   // if (Blog.user.toString() !== req.user._id.toString()) {
   //   res.status(401);
   //   throw new Error("You can't perform this action");
   // }
 
-  if (Blog) {
-    Blog.title = title;
-    Blog.content = content;
-    Blog.category = category;
+  if (blog) {
+    blog.title = title;
+    blog.content = content;
+    blog.category = category;
 
-    const updatedBlog = await Blog.save();
+    const updatedBlog = await blog.save();
     res.json(updatedBlog);
   } else {
     res.status(404);
@@ -65,7 +63,6 @@ const updateBlog = asyncHandler(async (req, res) => {
 //Creating API for DeleteBlog
 const deleteBlog = asyncHandler(async (req, res) => {
   const blog = await Blog.findById(req.params.id);
-  console.log(req)
   // if (blog.user.toString() !== req.user._id.toString()) {
   //   res.status(401);
   //   throw new Error("You can't perform this action");

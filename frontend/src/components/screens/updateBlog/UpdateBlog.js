@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import MainScreen from "../../components/MainScreen";
+import MainScreen from "../../MainScreen";
 import axios from "axios";
 import { Button, Card, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,12 +7,12 @@ import {
   deleteBlogAction,
   updateBlogAction,
 } from "../../../actions/blogActions";
-import ErrorMessage from "../../components/ErrorMessage";
-import Loading from "../../components/Loading";
+import ErrorMessage from "../../ErrorMessage";
+import Loading from "../../Loding";
 import ReactMarkdown from "react-markdown";
-import { Navigate } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 
-function updateBlog({ match, history }) {
+function UpdateBlog({ match, history }) {
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
   const [category, setCategory] = useState();
@@ -25,6 +25,8 @@ function updateBlog({ match, history }) {
 
   const blogDelete = useSelector((state) => state.blogDelete);
   const { loading: loadingDelete, error: errorDelete } = blogDelete;
+  let userId = useParams();
+  const navigate = useNavigate();
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure?")) {
@@ -35,8 +37,7 @@ function updateBlog({ match, history }) {
 
   useEffect(() => {
     const fetching = async () => {
-      const { data } = await axios.get(`/api/blog/${match.params.id}`);
-
+      const { data } = await axios.get(`/blog/${userId.id}`);
       setTitle(data.title);
       setContent(data.content);
       setCategory(data.category);
@@ -44,7 +45,7 @@ function updateBlog({ match, history }) {
     };
 
     fetching();
-  }, [match.params.id, date]);
+  }, [ userId.id, date]);
 
   const resetHandler = () => {
     setTitle("");
@@ -52,13 +53,13 @@ function updateBlog({ match, history }) {
     setContent("");
   };
 
-  const updateHandler = (e) => {
+  const updateHandler = async(e) => {
     e.preventDefault();
-    dispatch(updateBlogAction(match.params.id, title, content, category));
+    dispatch(updateBlogAction(userId.id, title, content, category));
     if (!title || !content || !category) return;
 
     resetHandler();
-    Navigate("/blog");
+    navigate("/blogs");
   };
 
   return (
@@ -114,13 +115,7 @@ function updateBlog({ match, history }) {
             <Button variant="primary" type="submit">
               Update Blog
             </Button>
-            <Button
-              className="mx-2"
-              variant="danger"
-              onClick={() => deleteHandler(match.params.id)}
-            >
-              Delete Blog
-            </Button>
+          
           </Form>
         </Card.Body>
 
@@ -132,4 +127,4 @@ function updateBlog({ match, history }) {
   );
 }
 
-export default updateBlog;
+export default UpdateBlog;

@@ -14,7 +14,7 @@ const { protect } = require("../middlewares/authMiddleware");
 router.route("/blogs").get(getBlog);
 router.route("/createblog").post(createBlog);
 router
-  .route("/:id")
+  .route("/blog/:id")
   .get(getBlogById)
   .put(updateBlog)
   .delete(deleteBlog);

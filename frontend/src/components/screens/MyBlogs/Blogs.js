@@ -10,32 +10,25 @@ import { useNavigate } from "react-router-dom";
 import { deleteBlogAction, listBlog } from "../../../actions/blogActions";
 
 
-const Blogs = ({search}) => {
+const Blogs = ({ search, history }) => {
   const dispatch = useDispatch();
 
   const blogList = useSelector((state) => state.blogList);
 
-  const {  blog, error } = blogList;
-  console.log(blog);
+  const { blog, error } = blogList;
 
-  
-  const userLogin = useSelector((state)=> state.userLogin);
-  const {userInfo} = userLogin;
-  const {name}  = userInfo;
-  console.log(name);
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  const { isAdmin } = userInfo;
   const navigate = useNavigate();
-   const blogDelete = useSelector((state) => state.blogDelete);
-   const {
-     error: errorDelete,
-     success: successDelete,
-   } = blogDelete;
+  const blogDelete = useSelector((state) => state.blogDelete);
+  const { error: errorDelete, success: successDelete } = blogDelete;
 
-   const noteCreate = useSelector((state) => state.blogCreate);
-   const { success: successCreate } = noteCreate;
+  const noteCreate = useSelector((state) => state.blogCreate);
+  const { success: successCreate } = noteCreate;
 
-   const blogUpdate = useSelector((state) => state.blogUpdate);
-   const { success: successUpdate } = blogUpdate;
-
+  const blogUpdate = useSelector((state) => state.blogUpdate);
+  const { success: successUpdate } = blogUpdate;
 
   const deleteBlog = (id) => {
     if (window.confirm("Are you sure?")) {
@@ -43,21 +36,30 @@ const Blogs = ({search}) => {
     }
   };
 
-  
   useEffect(() => {
     dispatch(listBlog());
-    if(!userInfo){
-       navigate("/")
+    if (!userInfo) {
+      navigate("/");
     }
-  }, [dispatch , navigate,userInfo , successCreate , successDelete, successUpdate]);
+  }, [
+    dispatch,
+    navigate,
+    userInfo,
+    successCreate,
+    successDelete,
+    successUpdate,
+  ]);
 
   return (
     <MainScreen title={`Welcome Back ${userInfo && userInfo.name}..`}>
-      {console.log(blog)}
       <Link to="/createblog">
-        <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
-          Create new Blog
-        </Button>
+        {isAdmin ? (
+          <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
+            Create new Blog
+          </Button>
+        ) : (
+          ""
+        )}
       </Link>
       {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
       {errorDelete && (
@@ -73,9 +75,9 @@ const Blogs = ({search}) => {
                   <Card.Title>{blog.title}</Card.Title>
                   <Card.Text>{blog.content}</Card.Text>
                   <Card.Footer>
-                    {name === "admin" ? (
+                    {isAdmin ? (
                       <div>
-                        <Button href={`/note/${blog._id}`}>Edit</Button>
+                        <Button href={`/blog/${blog._id}`}>Edit</Button>
                         <Button
                           variant="danger"
                           className="mx-2"
@@ -95,7 +97,7 @@ const Blogs = ({search}) => {
         ))}
     </MainScreen>
   );
-}
+};
 
 
 
